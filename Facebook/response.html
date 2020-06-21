@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		table thead td{text-align:center;font-weight:700;font-size:18px;}
+		#error-response,#successful-response{display:none;}
+		input[type='text']{width:450px;}
+	</style>
+</head>
+<body>
+	<table>
+		<tr id='successful-response'>
+			<td>
+				<table>
+					<thead>
+						<tr>
+							<td colspan='2'>Successful Response</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>code: </td>
+							<td id='code'></td>
+						</tr>
+						<tr>
+							<td>Paste your Facebook Client Secret:</td>
+							<td>
+								<input id='app_id' type='text' placeholder='Paste your Facebook App ID' value='613432622610402'>
+								<input id='client_secret' type='text' placeholder='Paste your Facebook Client Secret' value='3291c04c6545ce89d24aef58939ec991'>
+								<input id='get_access_token_B' type='button' value='Exchange Code with Access Token'>
+							</td>
+						</tr>
+						<tr>
+							<td>Access Token Status: </td>
+							<td id='access_token_status'></td>
+						</tr>
+						<tr>
+							<td>Access Token Value: </td>
+							<td id='access_token'></td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		<tr id='error-response'>
+			<td>
+				<table style='margin-top:100px;'>
+					<thead>
+						<tr>
+							<td colspan='2'>Error Response</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>error: </td>
+							<td id='error'></td>
+						</tr>
+						<tr>
+							<td>error_code: </td>
+							<td id='error_code'></td>
+						</tr>
+						<tr>
+							<td>error_description: </td>
+							<td id='error_description'></td>
+						</tr>
+						<tr>
+							<td>error_reason: </td>
+							<td id='error_reason'></td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+
+
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script>
+		var app_id = document.getElementById('app_id');
+		var client_secret = document.getElementById('client_secret');
+		var get_access_token_B = document.getElementById('get_access_token_B');
+		get_access_token_B.addEventListener('click', function(){
+			if(client_secret.value.length > 0 && app_id.value.length > 0)
+			{
+				axios.get('https://graph.facebook.com/v2.10/oauth/access_token', {
+					params: {
+						client_id:app_id.value,
+						client_secret:client_secret.value,
+						code:query_string_object.code,
+						redirect_uri:'https://how2codethis.github.io/OAuth2.0-Examples/Facebook/response.html'
+					},
+				})
+				.then(function (successful_response){
+					var response_data = successful_response.data;
+					document.getElementById('access_token_status').innerHTML = response_data.access_token;
+				})
+				.catch(function (error_response){
+					if(error_response.response)
+					{
+						var response_data = error_response.response.data;
+						document.getElementById('access_token_status').innerHTML = response_data.error.message;
+					}
+				});
+			}
+			else
+			{
+				alert("Enter Facebook's App ID and Client Secret to continue");
+			}
+		});
+
+
+		var query_string = window.location.search.substr(1);
+		var query_string = query_string.split('&');
+		var query_string_object = {};
+		query_string.forEach(createQueryStringObject);
+		evaluteResponse();
+
+		function createQueryStringObject(value, index)
+		{
+			var temp_obj = value.split('=');
+			query_string_object[temp_obj[0]] = temp_obj[1];
+		}
+		function evaluteResponse()
+		{
+			for(index in query_string_object)
+			{
+				switch(index)
+				{
+					case 'code':
+					{
+						document.getElementById('successful-response').style.display = 'block';
+						break;
+					}
+					case 'error':
+					{
+						document.getElementById('error-response').style.display = 'block';
+						break;
+					}
+				}
+				document.getElementById(index).innerHTML = query_string_object[index];
+			}
+		}
+	</script>
+	<!--
+		Successful Response: ?code=AQCHefFu0pfZPalkqcJ8sZemybLMHcLyz_AD6jTP-IlB38V3csu4cU7mtpKLaLNUGnSJy2BNPbr2hUT0ATD8xvPUFQhHmMKJD6ecC9rkIBpGDiNM5HVFD_5gprL8cwGscxBS1_G_hG14FA2SQnsLsjT_k-EJDuZo2Cv_7kZUgBjyCZZpmgWqfMV0ILgTc6C1tSxTLPz-AGTkrOEUfLU-c1_1IqXjm8pGUKbQF1ilUzL3XlGYzlIxMgml5AiApxRghGzPz_GN92aXgMMTyVpMNgpkJ4bpbY9tASyvRKvXyJ_5ot3wQyWKMEWceJArAg3QnBA#_=_
+		Error Response: ?error=access_denied&error_code=200&error_description=Permissions+error&error_reason=user_denied#_=_
+	-->
+</body>
+</html>
