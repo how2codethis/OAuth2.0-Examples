@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<style>
+			input[type='text']{width:400px;}
+		</style>
+	</head>
 	<body>
 		<table>
 			<tr>
-				<td>Facebook App ID:</td>
+				<td>Paste your Facebook App ID:</td>
 				<td>
-					<input id='app_id' type='text' placeholder='Facebook App ID'>
+					<input id='app_id' type='text' placeholder='Paste your Facebook App ID'>
+				</td>
+			</tr>
+			<tr>
+				<td>Paste your Client's Redirect URL:</td>
+				<td>
+					<input id='redirect_uri' type='text' placeholder="Paste your Client's Redirect URL" value='https://how2codethis.github.io/OAuth2.0-Examples/response.html'>
 				</td>
 			</tr>
 			<tr>
@@ -19,16 +30,19 @@
 
 		<script>
 			var app_id = document.getElementById('app_id');
+			var redirect_uri = document.getElementById('redirect_uri');
 			var oauth_redirect_url = document.getElementById('oauth_redirect_url');
 
 			app_id.addEventListener("keyup", function(){
 				updateFacebookOAuthURL();
 			});
+			redirect_uri.addEventListener("keyup", function(){
+				updateFacebookOAuthURL();
+			});
 
 
 			function updateFacebookOAuthURL(){
-				var redirect_uri = 'https://how2codethis.github.io/OAuth2.0-Examples/response.html';
-				var url = 'https://www.facebook.com/v2.10/dialog/oauth?client_id='+app_id.value+'&redirect_uri='+redirect_uri+'&scope=public_profile,email';
+				var url = 'https://www.facebook.com/v2.10/dialog/oauth?client_id='+app_id.value+'&redirect_uri='+redirect_uri.value+'&scope=public_profile,email';
 				oauth_redirect_url.href = url;
 				oauth_redirect_url.innerHTML = url;
 			}
