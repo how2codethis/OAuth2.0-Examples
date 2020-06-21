@@ -1,1 +1,42 @@
-Hii
+<!DOCTYPE html>
+<html>
+	<body>
+		<table>
+			<tr>
+				<td>Facebook App ID:</td>
+				<td>
+					<input id='app_id' type='text' placeholder='Facebook App ID'>
+				</td>
+			</tr>
+			<tr>
+				<td>Facebook OAuth Redirect URL:</td>
+				<td>
+					<a href='' id='oauth_redirect_url'></a>
+				</td>
+			</tr>
+		</table>
+
+
+		<script>
+			var app_id = document.getElementById('app_id');
+			var oauth_redirect_url = document.getElementById('oauth_redirect_url');
+
+			app_id.addEventListener("keyup", function(){
+				updateFacebookOAuthURL();
+			});
+
+
+			function updateFacebookOAuthURL(){
+				var redirect_uri = 'https://how2codethis.github.io/OAuth2.0-Examples/response.html';
+				var url = 'https://www.facebook.com/v2.10/dialog/oauth?client_id='+app_id.value+'&redirect_uri='+redirect_uri+'&scope=public_profile,email';
+				oauth_redirect_url.href = url;
+				oauth_redirect_url.innerHTML = url;
+			}
+		</script>
+	</body>
+	<!--
+		App ID: 613432622610402
+		Client Secret: 3291c04c6545ce89d24aef58939ec991
+	-->
+</html>
+
