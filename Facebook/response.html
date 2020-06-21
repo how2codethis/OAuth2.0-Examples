@@ -25,18 +25,14 @@
 						<tr>
 							<td>Paste your Facebook Client Secret:</td>
 							<td>
-								<input id='app_id' type='text' placeholder='Paste your Facebook App ID' value='613432622610402'>
-								<input id='client_secret' type='text' placeholder='Paste your Facebook Client Secret' value='3291c04c6545ce89d24aef58939ec991'>
+								<input id='app_id' type='text' placeholder='Paste your Facebook App ID'>
+								<input id='client_secret' type='text' placeholder='Paste your Facebook Client Secret'>
 								<input id='get_access_token_B' type='button' value='Exchange Code with Access Token'>
 							</td>
 						</tr>
 						<tr>
-							<td>Access Token Status: </td>
+							<td>Access Token: </td>
 							<td id='access_token_status'></td>
-						</tr>
-						<tr>
-							<td>Access Token Value: </td>
-							<td id='access_token'></td>
 						</tr>
 					</tbody>
 				</table>
@@ -88,18 +84,16 @@
 						client_id:app_id.value,
 						client_secret:client_secret.value,
 						code:query_string_object.code,
-						redirect_uri:'https://how2codethis.github.io/OAuth2.0-Examples/Facebook/response.html'
+						redirect_uri:window.location.origin+window.location.pathname
 					},
 				})
-				.then(function (successful_response){
-					var response_data = successful_response.data;
-					document.getElementById('access_token_status').innerHTML = response_data.access_token;
+				.then(function (response){
+					document.getElementById('access_token_status').innerHTML = response.data.access_token;
 				})
-				.catch(function (error_response){
-					if(error_response.response)
+				.catch(function (error){
+					if(error.response)
 					{
-						var response_data = error_response.response.data;
-						document.getElementById('access_token_status').innerHTML = response_data.error.message;
+						document.getElementById('access_token_status').innerHTML = error.response.data.error.message;
 					}
 				});
 			}
@@ -142,9 +136,5 @@
 			}
 		}
 	</script>
-	<!--
-		Successful Response: ?code=AQCHefFu0pfZPalkqcJ8sZemybLMHcLyz_AD6jTP-IlB38V3csu4cU7mtpKLaLNUGnSJy2BNPbr2hUT0ATD8xvPUFQhHmMKJD6ecC9rkIBpGDiNM5HVFD_5gprL8cwGscxBS1_G_hG14FA2SQnsLsjT_k-EJDuZo2Cv_7kZUgBjyCZZpmgWqfMV0ILgTc6C1tSxTLPz-AGTkrOEUfLU-c1_1IqXjm8pGUKbQF1ilUzL3XlGYzlIxMgml5AiApxRghGzPz_GN92aXgMMTyVpMNgpkJ4bpbY9tASyvRKvXyJ_5ot3wQyWKMEWceJArAg3QnBA#_=_
-		Error Response: ?error=access_denied&error_code=200&error_description=Permissions+error&error_reason=user_denied#_=_
-	-->
 </body>
 </html>
