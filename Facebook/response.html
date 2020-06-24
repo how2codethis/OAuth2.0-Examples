@@ -3,76 +3,95 @@
 <head>
 	<title>OAuth 2.0 Response</title>
 	<link rel="icon" type="image/png" href="https://how2codethis.github.io/OAuth2.0-Examples/favicon.ico">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 	<style>
-		table thead td{text-align:center;font-weight:700;font-size:18px;}
+		table thead th{font-weight:700;font-size:18px;}
 		#error-response,#successful-response{display:none;}
-		input[type='text']{width:450px;}
+		/*input[type='text']{width:450px;}*/
 	</style>
 </head>
 <body>
-	<table>
-		<tr id='successful-response'>
-			<td>
-				<table>
-					<thead>
-						<tr>
-							<td colspan='2'>Successful Response</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>code: </td>
-							<td id='code'></td>
-						</tr>
-						<tr>
-							<td>Paste your Facebook Client Secret:</td>
-							<td>
-								<input id='app_id' type='text' placeholder='Paste your Facebook App ID'>
-								<input id='client_secret' type='text' placeholder='Paste your Facebook Client Secret'>
-								<input id='get_access_token_B' type='button' value='Exchange Code with Access Token'>
-							</td>
-						</tr>
-						<tr>
-							<td>Access Token: </td>
-							<td id='access_token_status'></td>
-						</tr>
-					</tbody>
-				</table>
-			</td>
-		</tr>
-		<tr id='error-response'>
-			<td>
-				<table style='margin-top:100px;'>
-					<thead>
-						<tr>
-							<td colspan='2'>Error Response</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>error: </td>
-							<td id='error'></td>
-						</tr>
-						<tr>
-							<td>error_code: </td>
-							<td id='error_code'></td>
-						</tr>
-						<tr>
-							<td>error_description: </td>
-							<td id='error_description'></td>
-						</tr>
-						<tr>
-							<td>error_reason: </td>
-							<td id='error_reason'></td>
-						</tr>
-					</tbody>
-				</table>
-			</td>
-		</tr>
-	</table>
+	<div class='container' style='margin-top:50px;'>
+		<div class='row'>
+			<div class='col s12 m8'>
+				<div class='row'>
+					<table id='successful-response'>
+						<thead>
+							<tr>
+								<th colspan='2'>Successful Response</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td style='min-width:200px;'>code: </td>
+								<td id='code'></td>
+							</tr>
+							<tr>
+								<td>Paste your Facebook App ID:</td>
+								<td>
+									<div class="input-field col s12 m4">
+										<input id='app_id' type='text'>
+										<label for="app_id">Paste your Facebook App ID</label>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>Paste your Facebook Client Secret:</td>
+								<td>
+									<div class="input-field col s12 m4">
+										<input id='client_secret' type='text'>
+										<label for="client_secret">Paste your Facebook Client Secret</label>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>Exchange Code with Access Token:</td>
+								<td>
+									<input id='get_access_token_B' type='button' class='btn' value='Exchange Code with Access Token'>
+								</td>
+							</tr>
+							<tr>
+								<td>Access Token: </td>
+								<td id='access_token_status'></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class='row'>
+					<table id='error-response'>
+						<thead>
+							<tr>
+								<th colspan='2'>Error Response</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td style='min-width:200px;'>error: </td>
+								<td style='min-width:200px;' id='error'></td>
+							</tr>
+							<tr>
+								<td>error_code: </td>
+								<td id='error_code'></td>
+							</tr>
+							<tr>
+								<td>error_description: </td>
+								<td id='error_description'></td>
+							</tr>
+							<tr>
+								<td>error_reason: </td>
+								<td id='error_reason'></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script>
 		var app_id = document.getElementById('app_id');

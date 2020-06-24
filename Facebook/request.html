@@ -3,37 +3,50 @@
 	<head>
 		<title>OAuth 2.0 Request</title>
 		<link rel="icon" type="image/png" href="https://how2codethis.github.io/OAuth2.0-Examples/favicon.ico">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 		<style>
 			input[type='text']{width:450px;}
 		</style>
 	</head>
 	<body>
-		<table>
-			<tr>
-				<td>Paste your Facebook App ID:</td>
-				<td>
-					<input id='app_id' type='text' placeholder='Paste your Facebook App ID'>
-				</td>
-			</tr>
-			<tr>
-				<td>Paste your Client's Redirect URL:</td>
-				<td>
-					<input id='redirect_uri' type='text' placeholder="Paste your Client's Redirect URL" value='https://how2codethis.github.io/OAuth2.0-Examples/Facebook/response.html'>
-				</td>
-			</tr>
-			<tr>
-				<td>Facebook OAuth Redirect URL:</td>
-				<td>
-					<a href='' id='oauth_redirect_url'></a>
-				</td>
-			</tr>
-		</table>
+		<div class='row' style='margin-top:50px;'>
+			<div class='col s12 m8'>
+				<table>
+					<tr>
+						<td>Paste your Facebook App ID:</td>
+						<td>
+							<div class="input-field col s12 m4">
+								<input id='app_id' type='text'>
+								<label for="app_id">Paste your Facebook App ID</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>Paste your Client's Redirect URL:</td>
+						<td>
+							<div class="input-field col s12">
+								<input id='redirect_uri' type='text' value='https://how2codethis.github.io/OAuth2.0-Examples/Facebook/response.html'>
+								<label for="redirect_uri">Paste your Client's Redirect URL</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>Facebook OAuth Redirect URL:</td>
+						<td>
+							<a href='' id='oauth_redirect_url'></a>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
 
 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 		<script>
 			var app_id = document.getElementById('app_id');
 			var redirect_uri = document.getElementById('redirect_uri');
 			var oauth_redirect_url = document.getElementById('oauth_redirect_url');
+			updateFacebookOAuthURL();
 
 			app_id.addEventListener("keyup", function(){
 				updateFacebookOAuthURL();
