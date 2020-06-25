@@ -5,61 +5,90 @@
 	<link rel="icon" type="image/png" href="https://how2codethis.github.io/OAuth2.0-Examples/favicon.ico">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 	<style>
-		table thead th{font-weight:700;font-size:18px;}
 		#error-response,#successful-response{display:none;}
-		/*input[type='text']{width:450px;}*/
 	</style>
 </head>
 <body>
 	<div class='container' style='margin-top:50px;'>
 		<div class='row'>
-			<div class='col s12 m8'>
-				<div class='row'>
-					<table id='successful-response'>
-						<thead>
-							<tr>
-								<th colspan='2'>Successful Response</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td style='min-width:200px;'>code: </td>
-								<td id='code'></td>
-							</tr>
-							<tr>
-								<td>Paste your Facebook App ID:</td>
-								<td>
-									<div class="input-field col s12 m4">
-										<input id='app_id' type='text'>
-										<label for="app_id">Paste your Facebook App ID</label>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>Paste your Facebook Client Secret:</td>
-								<td>
-									<div class="input-field col s12 m4">
-										<input id='client_secret' type='text'>
-										<label for="client_secret">Paste your Facebook Client Secret</label>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>Exchange Code with Access Token:</td>
-								<td>
-									<input id='get_access_token_B' type='button' class='btn' value='Exchange Code with Access Token'>
-								</td>
-							</tr>
-							<tr>
-								<td>Access Token: </td>
-								<td id='access_token_status'></td>
-							</tr>
-						</tbody>
-					</table>
+			<div class='col s12'>
+				<div id='successful-response' class='row'>
+					<div class='row'>
+						<h4>Successful Response</h4>
+					</div>
+					<div class='row'>
+						<table>
+							<thead>
+								<tr>
+									<th></th>
+									<th>Value</th>
+									<th>Explanation</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td style='min-width:250px;'>code: </td>
+									<td>
+										<div class="input-field">
+											<textarea id='code' class="materialize-textarea"></textarea>
+										</div>
+									</td>
+									<td>This is the code given by Facebook when redirecting from Facebook's Consent Screen to Client's Redirect URL</td>
+								</tr>
+								<tr>
+									<td>Paste your Facebook App ID:</td>
+									<td>
+										<div class="input-field">
+											<input id='app_id' type='text'>
+											<label for="app_id">Facebook App ID</label>
+										</div>
+									</td>
+									<td>Facebook App ID is required to exchange the code with access token</td>
+								</tr>
+								<tr>
+									<td>Paste your Facebook Client Secret:</td>
+									<td>
+										<div class="input-field">
+											<input id='client_secret' type='text'>
+											<label for="client_secret">Facebook Client Secret</label>
+										</div>
+									</td>
+									<td>Facebook Client Secret is required to exchange the code with access token</td>
+								</tr>
+								<tr>
+									<td>Paste Redirect URL of your Client:</td>
+									<td>
+										<div class="input-field">
+											<input id='redirect_uri' type='text'>
+											<label for="redirect_uri">Client's Redirect URL</label>
+										</div>
+									</td>
+									<td>Client's Redirect URL is required to exchange the code with access token</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>
+										<input id='get_access_token_B' type='button' class='btn blue' value='Exchange Code with Access Token'>
+									</td>
+									<td>
+										<div class="section">
+											<h6>Access Token API Endpoint:</h6>
+											<p id='access_token_api_url'></p>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>Access Token: </td>
+									<td id='access_token_status'></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 
-				<div class='row'>
-					<table id='error-response'>
+				<div class='row' id='error-response'>
+					<table>
 						<thead>
 							<tr>
 								<th colspan='2'>Error Response</th>
@@ -96,7 +125,12 @@
 	<script>
 		var app_id = document.getElementById('app_id');
 		var client_secret = document.getElementById('client_secret');
+		var redirect_uri = document.getElementById('redirect_uri');
+		var access_token_api_url = document.getElementById('access_token_api_url');
 		var get_access_token_B = document.getElementById('get_access_token_B');
+		app_id.addEventListener("keyup", function(){renderAccessTokenAPIURL();});
+		client_secret.addEventListener("keyup", function(){renderAccessTokenAPIURL();});
+		redirect_uri.addEventListener("keyup", function(){renderAccessTokenAPIURL();});
 		get_access_token_B.addEventListener('click', function(){
 			if(client_secret.value.length > 0 && app_id.value.length > 0)
 			{
@@ -105,7 +139,7 @@
 						client_id:app_id.value,
 						client_secret:client_secret.value,
 						code:query_string_object.code,
-						redirect_uri:window.location.origin+window.location.pathname
+						redirect_uri:redirect_uri.value
 					},
 				})
 				.then(function (response){
@@ -123,6 +157,15 @@
 				alert("Enter Facebook's App ID and Client Secret to continue");
 			}
 		});
+		function renderAccessTokenAPIURL()
+		{
+			var base_url = "https://graph.facebook.com/v2.10/oauth/access_token";
+			base_url += "?client_id="+app_id.value;
+			base_url += "&client_secret="+client_secret.value;
+			base_url += "&redirect_uri="+redirect_uri.value;
+			base_url += "&code="+query_string_object.code;
+			access_token_api_url.innerHTML = base_url;
+		}
 
 
 		var query_string = window.location.search.substr(1);
@@ -130,7 +173,6 @@
 		var query_string_object = {};
 		query_string.forEach(createQueryStringObject);
 		evaluteResponse();
-
 		function createQueryStringObject(value, index)
 		{
 			var temp_obj = value.split('=');
